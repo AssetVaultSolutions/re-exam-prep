@@ -1,0 +1,2789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RE Exam Prep System</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .sidebar {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .main-content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            min-height: 70vh;
+        }
+        
+        .exam-selector {
+            margin-bottom: 20px;
+        }
+        
+        .exam-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .task-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+        
+        .task-list li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .task-list li:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .task-list li.active {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .task-progress {
+            font-size: 0.8rem;
+            background: rgba(0,0,0,0.1);
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+        
+        .task-list li.active .task-progress {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .question-container {
+            margin-bottom: 20px;
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .options {
+            list-style: none;
+        }
+        
+        .option {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .option:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .option.selected {
+            background-color: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        .option.correct {
+            background-color: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+        
+        .option.incorrect {
+            background-color: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--secondary);
+            transition: width 0.3s;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+            margin: 0 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .results-container {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .score {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: var(--secondary);
+        }
+        
+        .performance-summary {
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .summary-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--dark);
+            background: #f9f9f9;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background-color: rgba(46, 204, 113, 0.1);
+            border: 1px solid var(--success);
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background-color: rgba(231, 76, 60, 0.1);
+            border: 1px solid var(--danger);
+            display: block;
+        }
+        
+        .question-counter {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .task-title {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .resource-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .resource-item {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .resource-item h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .performance-chart {
+            margin: 30px auto;
+            max-width: 600px;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            .exam-buttons {
+                flex-direction: column;
+            }
+            
+            .performance-summary {
+                grid-template-columns: 1fr;
+            }
+            
+            .resource-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">RE Exam Prep System</div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="nav-link" data-section="dashboard">Dashboard</a></li>
+                        <li><a href="#" class="nav-link" data-section="practice">Practice</a></li>
+                        <li><a href="#" class="nav-link" data-section="results">Results</a></li>
+                        <li><a href="#" class="nav-link" data-section="resources">Resources</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section">
+            <h1>Welcome to RE Exam Preparation</h1>
+            <p>This interactive system will help you prepare for both RE1 and RE5 examinations through practice questions and performance tracking.</p>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="total-questions">0</div>
+                    <div class="stat-label">Total Questions</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="correct-answers">0</div>
+                    <div class="stat-label">Correct Answers</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="accuracy">0%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="completed-tasks">0</div>
+                    <div class="stat-label">Completed Tasks</div>
+                </div>
+            </div>
+            
+            <div class="exam-selector">
+                <h2>Select Exam Type</h2>
+                <div class="exam-buttons">
+                    <button class="btn btn-primary" id="re1-btn">RE1 Mock Questions (240)</button>
+                    <button class="btn btn-primary" id="re5-btn">RE5 Mock Questions (120)</button>
+                </div>
+            </div>
+            
+            <div class="quick-start">
+                <h2>Quick Start</h2>
+                <p>Select an exam type above to begin practicing, or continue where you left off.</p>
+                <button class="btn btn-secondary" id="continue-btn">Continue Last Session</button>
+            </div>
+        </section>
+
+        <!-- Practice Section -->
+        <section id="practice" class="section hidden">
+            <div class="dashboard">
+                <div class="sidebar">
+                    <h3>Tasks</h3>
+                    <ul class="task-list" id="task-list">
+                        <!-- Tasks will be populated by JavaScript -->
+                    </ul>
+                </div>
+                
+                <div class="main-content">
+                    <div class="question-header">
+                        <div>
+                            <div class="task-title" id="current-task-title">Task 1: Demonstrate understanding of the FAIS Act</div>
+                            <div class="question-counter" id="question-counter">Question 1 of 15</div>
+                        </div>
+                        <div class="timer" id="timer">00:00</div>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress" id="progress" style="width: 0%"></div>
+                    </div>
+                    
+                    <div class="question-container">
+                        <div class="question-text" id="question-text">
+                            <!-- Question text will be inserted here -->
+                        </div>
+                        
+                        <ul class="options" id="options">
+                            <!-- Options will be inserted here -->
+                        </ul>
+                        
+                        <div class="feedback" id="feedback">
+                            <!-- Feedback will be inserted here -->
+                        </div>
+                    </div>
+                    
+                    <div class="navigation">
+                        <button class="btn btn-secondary" id="prev-btn">Previous</button>
+                        <button class="btn btn-primary" id="next-btn">Next</button>
+                        <button class="btn btn-success" id="submit-btn" style="display: none;">Submit Answer</button>
+                        <button class="btn btn-danger" id="finish-btn" style="display: none;">Finish Task</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results" class="section hidden">
+            <div class="results-container">
+                <h2>Your Performance Summary</h2>
+                <div class="score" id="final-score">0%</div>
+                
+                <div class="performance-summary">
+                    <div class="summary-item">
+                        <p>Total Questions: <span id="summary-total">0</span></p>
+                    </div>
+                    <div class="summary-item">
+                        <p>Correct Answers: <span id="summary-correct">0</span></p>
+                    </div>
+                    <div class="summary-item">
+                        <p>Incorrect Answers: <span id="summary-incorrect">0</span></p>
+                    </div>
+                    <div class="summary-item">
+                        <p>Time Spent: <span id="summary-time">00:00</span></p>
+                    </div>
+                </div>
+                
+                <div class="performance-chart">
+                    <canvas id="performanceChart" width="400" height="200"></canvas>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <button class="btn btn-primary" id="review-btn">Review Answers</button>
+                    <button class="btn btn-secondary" id="new-session-btn">Start New Session</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section id="resources" class="section hidden">
+            <h2>Study Resources</h2>
+            <div class="resource-list">
+                <div class="resource-item">
+                    <h3>RE5 Supplementary Study Material</h3>
+                    <p>A comprehensive summary of key concepts for the RE5 examination.</p>
+                    <button class="btn btn-primary" id="view-re5-material">View Material</button>
+                </div>
+                
+                <div class="resource-item">
+                    <h3>FAIS Act Overview</h3>
+                    <p>Key information about the Financial Advisory and Intermediary Services Act.</p>
+                    <button class="btn btn-primary" id="view-fais-info">Learn More</button>
+                </div>
+                
+                <div class="resource-item">
+                    <h3>FIC Act Guidelines</h3>
+                    <p>Understanding the Financial Intelligence Centre Act requirements.</p>
+                    <button class="btn btn-primary" id="view-fic-info">Study Guide</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Complete RE5 exam data from the PDF
+        const examData = {
+            re1: {
+                title: "RE1 Mock Questions",
+                taskCount: 16,
+                tasks: [
+                    {
+                        title: "Demonstrate understanding of the FAIS Act as a regulatory framework",
+                        questions: [
+                            {
+                                id: 1,
+                                question: "What is the primary objective of the FAIS Act?",
+                                options: [
+                                    "To regulate South African financial service providers.",
+                                    "To govern international trade agreements.",
+                                    "To ensure global financial equity.",
+                                    "To oversee taxation regulations."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 2,
+                                question: "What does FAIS stand for?",
+                                options: [
+                                    "Financial Advisory and Insurance Services.",
+                                    "Financial Advisory and Intermediary Services.",
+                                    "Financial Auditing and Intermediary Services.",
+                                    "Financial Analysis and Intermediary Services."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 3,
+                                question: "Which year was the FAIS Act first enacted?",
+                                options: [
+                                    "1998",
+                                    "2002",
+                                    "2015",
+                                    "2020"
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 4,
+                                question: "What authority is responsible for enforcing the FAIS Act?",
+                                options: [
+                                    "The South African Reserve Bank.",
+                                    "Financial Sector Conduct Authority (FSCA).",
+                                    "The Department of Finance.",
+                                    "The Financial Intelligence Centre (FIC)."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 5,
+                                question: "Under the FAIS Act, who is considered a 'representative'?",
+                                options: [
+                                    "Anyone selling financial products.",
+                                    "An individual providing financial advice or intermediary services on behalf of a licensed FSP.",
+                                    "A clerk filing financial records.",
+                                    "An auditor reviewing corporate accounts."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 6,
+                                question: "What does the FAIS Act require FSPs to maintain?",
+                                options: [
+                                    "A customer loyalty program.",
+                                    "Proper records of advice given to clients.",
+                                    "A global financial trading license.",
+                                    "A list of competitors."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 7,
+                                question: "What is the purpose of the General Code of Conduct under FAIS?",
+                                options: [
+                                    "To provide guidelines for global investments.",
+                                    "To promote ethical and fair treatment of clients.",
+                                    "To regulate government taxation policies.",
+                                    "To increase FSP profitability."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 8,
+                                question: "Which of the following best describes 'intermediary services' under FAIS?",
+                                options: [
+                                    "Administrative support for FSPs.",
+                                    "Activities facilitating transactions between clients and product suppliers.",
+                                    "Selling foreign currency in cash.",
+                                    "Managing logistics for multinational corporations."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 9,
+                                question: "What is required of FSPs in terms of compliance?",
+                                options: [
+                                    "Annual renewal of their trade license.",
+                                    "Regular auditing and adherence to the FAIS Act provisions.",
+                                    "Selling products only to high-net-worth clients.",
+                                    "Reporting profits to the FSCA."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 10,
+                                question: "Who appoints the Ombud for financial services complaints under FAIS?",
+                                options: [
+                                    "The President of South Africa.",
+                                    "The FSCA.",
+                                    "Parliament.",
+                                    "The Minister of Finance."
+                                ],
+                                correctAnswer: 3
+                            },
+                            {
+                                id: 11,
+                                question: "What happens if an FSP breaches the FAIS Act?",
+                                options: [
+                                    "They are fined automatically.",
+                                    "Their license may be suspended or withdrawn.",
+                                    "They receive a warning from the Ombud.",
+                                    "They are prosecuted in criminal court."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 12,
+                                question: "What is an FSP required to do when hiring representatives?",
+                                options: [
+                                    "Ensure they meet the 'fit and proper' requirements.",
+                                    "Offer training only after appointment.",
+                                    "Conduct an annual salary review.",
+                                    "Allow unqualified candidates to undergo supervision indefinitely."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 13,
+                                question: "What role does the FAIS Act play in client protection?",
+                                options: [
+                                    "Ensures that financial products yield profits.",
+                                    "Guarantees fair treatment and accurate advice to clients.",
+                                    "Controls pricing for financial products.",
+                                    "Eliminates competition among FSPs."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 14,
+                                question: "What is the maximum penalty for a breach of FAIS regulations?",
+                                options: [
+                                    "License suspension only.",
+                                    "A monetary fine or imprisonment.",
+                                    "Public apology to clients.",
+                                    "Mandatory retraining for employees."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 15,
+                                question: "What are 'fit and proper' requirements under FAIS?",
+                                options: [
+                                    "Qualifications required for offering financial services.",
+                                    "Physical fitness requirements for representatives.",
+                                    "Policies for attracting clients.",
+                                    "Guidelines for marketing campaigns."
+                                ],
+                                correctAnswer: 0
+                            }
+                        ]
+                    },
+                    {
+                        title: "Define financial products and financial services",
+                        questions: [
+                            {
+                                id: 1,
+                                question: "Which of the following is an example of a financial product?",
+                                options: [
+                                    "A life insurance policy.",
+                                    "A leased vehicle.",
+                                    "A utility bill.",
+                                    "A supermarket loyalty card."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 2,
+                                question: "Which Act defines financial products and services in South Africa?",
+                                options: [
+                                    "The Companies Act.",
+                                    "The FAIS Act.",
+                                    "The Financial Services Act.",
+                                    "The Consumer Protection Act."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 3,
+                                question: "What is a 'long-term insurance policy'?",
+                                options: [
+                                    "A financial product.",
+                                    "A banking regulation.",
+                                    "An intermediary service.",
+                                    "A government subsidy."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 4,
+                                question: "Which of the following activities is classified as a financial service?",
+                                options: [
+                                    "Managing customer complaints.",
+                                    "Advising a client on financial products.",
+                                    "Delivering physical goods to clients.",
+                                    "Filing tax returns for individuals."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 5,
+                                question: "What is the primary purpose of intermediary services?",
+                                options: [
+                                    "To provide legal advice to clients.",
+                                    "To facilitate transactions between clients and product suppliers.",
+                                    "To monitor financial markets.",
+                                    "To draft financial legislation."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 6,
+                                question: "Under the FAIS Act, what does 'advice' include?",
+                                options: [
+                                    "Informing clients about tax deadlines.",
+                                    "Recommending financial products to a client.",
+                                    "Offering personal opinions unrelated to financial matters.",
+                                    "Sharing general news about economic trends."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 7,
+                                question: "Which of the following is NOT a financial product as defined by the FAIS Act?",
+                                options: [
+                                    "Shares in a company.",
+                                    "A long-term insurance policy.",
+                                    "Real estate property.",
+                                    "A health service benefit."
+                                ],
+                                correctAnswer: 3
+                            },
+                            {
+                                id: 8,
+                                question: "What type of financial product is provided by a pension fund organization?",
+                                options: [
+                                    "Insurance benefits.",
+                                    "Participatory interests.",
+                                    "Health service benefits.",
+                                    "Retirement benefits."
+                                ],
+                                correctAnswer: 3
+                            },
+                            {
+                                id: 9,
+                                question: "What is a 'participatory interest' in terms of financial products?",
+                                options: [
+                                    "Ownership of a physical asset.",
+                                    "An investment in a collective investment scheme.",
+                                    "A short-term loan agreement.",
+                                    "An agreement to share profits in a business."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 10,
+                                question: "Which of the following services qualifies as a financial intermediary service?",
+                                options: [
+                                    "Selling groceries to clients.",
+                                    "Facilitating the sale of a financial product to a client.",
+                                    "Conducting medical insurance claims investigations.",
+                                    "Auditing a company's financial records."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 11,
+                                question: "What type of financial product is governed by the Short-term Insurance Act, 1998?",
+                                options: [
+                                    "Shares in a public company.",
+                                    "Vehicle insurance policies.",
+                                    "Long-term pension fund schemes.",
+                                    "Health savings accounts."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 12,
+                                question: "What is the role of a compliance officer in relation to financial services?",
+                                options: [
+                                    "Managing product development.",
+                                    "Ensuring adherence to regulatory requirements.",
+                                    "Conducting marketing for financial products.",
+                                    "Setting prices for financial services."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 13,
+                                question: "What is a 'money-market instrument' under the FAIS Act?",
+                                options: [
+                                    "A tool for monitoring inflation.",
+                                    "A type of financial product used for short-term borrowing and lending.",
+                                    "A stock trading platform.",
+                                    "A credit card offered by banks."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 14,
+                                question: "What is the primary function of the FAIS Act regarding financial products?",
+                                options: [
+                                    "To regulate the marketing of all services.",
+                                    "To ensure that clients receive appropriate advice and intermediary services.",
+                                    "To provide tax relief to financial institutions.",
+                                    "To manage South Africa's economic policy."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 15,
+                                question: "Which of the following constitutes advice under FAIS?",
+                                options: [
+                                    "Giving objective product descriptions only.",
+                                    "Recommending a specific financial product to a client.",
+                                    "Offering free samples of financial services.",
+                                    "Providing administrative support to financial service providers."
+                                ],
+                                correctAnswer: 1
+                            }
+                        ]
+                    },
+                    // Additional RE1 tasks would be added here
+                    // For brevity, I'm showing just the first two tasks
+                ]
+            },
+            re5: {
+                title: "RE5 Mock Questions",
+                taskCount: 8,
+                tasks: [
+                    {
+                        title: "Demonstrate understanding of the FAIS Act as a regulatory framework",
+                        questions: [
+                            {
+                                id: 1,
+                                question: "What is the main purpose of the FAIS Act?",
+                                options: [
+                                    "To regulate financial markets globally.",
+                                    "To ensure ethical conduct and compliance in the rendering of financial advisory and intermediary services in South Africa.",
+                                    "To promote competition among financial service providers.",
+                                    "To manage financial product prices."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 2,
+                                question: "Who is responsible for enforcing the FAIS Act?",
+                                options: [
+                                    "Financial Intelligence Centre (FIC).",
+                                    "National Treasury.",
+                                    "Financial Sector Conduct Authority (FSCA).",
+                                    "The Reserve Bank of South Africa."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 3,
+                                question: "Which of the following is NOT a primary goal of the FAIS Act?",
+                                options: [
+                                    "Protecting clients from financial exploitation.",
+                                    "Guaranteeing investment returns to clients.",
+                                    "Ensuring that financial service providers are 'fit and proper.'",
+                                    "Regulating the conduct of financial advisors and intermediaries."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 4,
+                                question: "What does the FAIS Act regulate?",
+                                options: [
+                                    "The issuance of company shares.",
+                                    "The rendering of financial advisory and intermediary services to clients.",
+                                    "Tax policies for financial institutions.",
+                                    "Banking operations in South Africa."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 5,
+                                question: "What is the role of the General Code of Conduct under the FAIS Act?",
+                                options: [
+                                    "To determine the prices of financial products.",
+                                    "To provide guidelines for ethical behaviour and fair treatment of clients.",
+                                    "To oversee mergers between financial institutions.",
+                                    "To set sales targets for FSPs."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 6,
+                                question: "Under the FAIS Act, what is a 'representative'?",
+                                options: [
+                                    "A key individual managing compliance.",
+                                    "An external auditor of the FSP.",
+                                    "An individual who renders financial services to clients on behalf of a licensed FSP.",
+                                    "Any financial institution."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 7,
+                                question: "What happens if an FSP breaches the FAIS Act?",
+                                options: [
+                                    "The FSCA may impose fines, suspend, or revoke the FSP's license.",
+                                    "The FSP must pay a penalty and continue operating.",
+                                    "The Ombud resolves the matter privately.",
+                                    "The FSP automatically transitions to a restricted license."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 8,
+                                question: "What does the term 'fit and proper' refer to under the FAIS Act?",
+                                options: [
+                                    "The required qualifications, competence, and ethical standards of an FSP or representative.",
+                                    "A representative's physical health.",
+                                    "A representative's financial targets.",
+                                    "The FSP's infrastructure capacity."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 9,
+                                question: "What is the role of the Ombud for FSPs in the FAIS framework?",
+                                options: [
+                                    "To approve licenses for FSPs.",
+                                    "To resolve client complaints against financial service providers.",
+                                    "To draft new financial policies.",
+                                    "To monitor FSP profits."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 10,
+                                question: "What is the consequence of providing financial advice without being licensed under the FAIS Act?",
+                                options: [
+                                    "No legal consequence.",
+                                    "Possible imprisonment or fines.",
+                                    "Automatic registration by the FSCA.",
+                                    "The individual receives a warning."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 11,
+                                question: "What are financial services providers (FSPs) required to maintain under the FAIS Act?",
+                                options: [
+                                    "Detailed client databases.",
+                                    "Records of financial advice provided to clients.",
+                                    "A list of competitors.",
+                                    "A pricing model for financial products."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 12,
+                                question: "Who qualifies as a 'client' under the FAIS Act?",
+                                options: [
+                                    "An employee of an FSP.",
+                                    "A person or entity to whom a financial service is rendered.",
+                                    "A shareholder in a financial institution.",
+                                    "Any individual who purchases a financial product."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 13,
+                                question: "What is required of FSPs regarding conflicts of interest?",
+                                options: [
+                                    "Reporting all conflicts to the FSCA.",
+                                    "Eliminating conflicts of interest entirely.",
+                                    "Avoiding or disclosing conflicts of interest to clients.",
+                                    "Ignoring conflicts of interest if the client agrees."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 14,
+                                question: "What is the FSCA's primary responsibility under the FAIS Act?",
+                                options: [
+                                    "To approve financial product prices.",
+                                    "To regulate and oversee the conduct of FSPs and representatives.",
+                                    "To set interest rates for the financial industry.",
+                                    "To handle all tax-related matters."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 15,
+                                question: "What document outlines the ethical standards required by the FAIS Act?",
+                                options: [
+                                    "The National Credit Act.",
+                                    "The General Code of Conduct.",
+                                    "The Taxation Act.",
+                                    "The Key Information Document (KID)."
+                                ],
+                                correctAnswer: 1
+                            }
+                        ]
+                    },
+                    {
+                        title: "Contribute towards maintaining an FSP license",
+                        questions: [
+                            {
+                                id: 1,
+                                question: "What is the validity period of an FSP license under the FAIS Act?",
+                                options: [
+                                    "Five years.",
+                                    "Two years.",
+                                    "Indefinite, as long as compliance is maintained.",
+                                    "One year."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 2,
+                                question: "What must an FSP do when there are material changes to its business operations?",
+                                options: [
+                                    "Submit an annual compliance report only.",
+                                    "Notify the FSCA within the prescribed timeframe.",
+                                    "Wait for the next renewal cycle.",
+                                    "Inform clients directly."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 3,
+                                question: "What is a potential consequence of non-compliance with licensing requirements?",
+                                options: [
+                                    "Suspension or withdrawal of the FSP license.",
+                                    "Automatic renewal of the license.",
+                                    "Temporary deactivation of representatives.",
+                                    "Issuance of a warning with no further consequences."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 4,
+                                question: "Who is responsible for ensuring an FSP's license remains valid?",
+                                options: [
+                                    "The Ombud for Financial Services Providers.",
+                                    "The FSCA.",
+                                    "The key individuals within the FSP.",
+                                    "The compliance officer only."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 5,
+                                question: "What must an FSP submit annually to the FSCA?",
+                                options: [
+                                    "A marketing strategy report.",
+                                    "A summary of client transactions.",
+                                    "A compliance report and financial statements.",
+                                    "A performance review of representatives."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 6,
+                                question: "What is a requirement for FSPs regarding their financial soundness?",
+                                options: [
+                                    "Maintaining only a fixed amount of capital.",
+                                    "Submitting profit projections annually.",
+                                    "Demonstrating sufficient resources to meet operational and regulatory obligations.",
+                                    "Conducting client surveys annually."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 7,
+                                question: "When can the FSCA withdraw an FSP license?",
+                                options: [
+                                    "When an FSP refuses to hire new representatives.",
+                                    "If the FSP requests a voluntary suspension.",
+                                    "If the FSP fails to meet fit and proper requirements or violates the FAIS Act.",
+                                    "When the FSP operates in multiple provinces."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 8,
+                                question: "How does compliance contribute to maintaining an FSP license?",
+                                options: [
+                                    "By promoting product profitability.",
+                                    "By reducing administrative tasks.",
+                                    "By ensuring adherence to legal and regulatory requirements.",
+                                    "By limiting client complaints."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 9,
+                                question: "What must be included in an FSP's compliance monitoring plan?",
+                                options: [
+                                    "Monthly sales targets.",
+                                    "A list of client feedback reports.",
+                                    "Risk management procedures and oversight of representatives.",
+                                    "Marketing expenses for the year."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 10,
+                                question: "What should an FSP do if it intends to cease operations?",
+                                options: [
+                                    "Wait for the next compliance review.",
+                                    "Notify the FSCA in writing before ceasing operations.",
+                                    "Inform clients and terminate all contracts.",
+                                    "Suspend services indefinitely without notifying authorities."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 11,
+                                question: "How does the FSCA monitor FSP compliance with licensing requirements?",
+                                options: [
+                                    "Through periodic audits and reviews.",
+                                    "By conducting daily inspections of all FSPs.",
+                                    "By reviewing client satisfaction surveys.",
+                                    "By delegating monitoring to third-party agencies."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 12,
+                                question: "What must an FSP demonstrate to maintain its license?",
+                                options: [
+                                    "A high rate of client retention.",
+                                    "An effective marketing strategy.",
+                                    "Compliance with fit and proper requirements and financial soundness.",
+                                    "Continuous recruitment of representatives."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 13,
+                                question: "What is the role of the compliance officer in maintaining an FSP license?",
+                                options: [
+                                    "Supervising all representatives directly.",
+                                    "Monitoring adherence to the FAIS Act and submitting reports to the FSCA.",
+                                    "Handling marketing campaigns.",
+                                    "Managing the FSP's financial accounts."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 14,
+                                question: "What should an FSP do if it is unable to meet licensing requirements?",
+                                options: [
+                                    "Halt operations indefinitely.",
+                                    "Notify the FSCA immediately and provide a corrective action plan.",
+                                    "Wait for the FSCA to issue a penalty.",
+                                    "Appeal to the Ombud for leniency."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 15,
+                                question: "What is required when an FSP changes its key individuals?",
+                                options: [
+                                    "Informing representatives but not the FSCA.",
+                                    "Waiting for the next annual renewal.",
+                                    "Notifying the FSCA and ensuring the new key individuals meet fit and proper requirements.",
+                                    "Submitting only an internal memo for record-keeping."
+                                ],
+                                correctAnswer: 2
+                            }
+                        ]
+                    },
+                    {
+                        title: "Define the role of the key individual in terms of the FAIS Act",
+                        questions: [
+                            {
+                                id: 1,
+                                question: "Who is considered a key individual under the FAIS Act?",
+                                options: [
+                                    "A representative of the FSP.",
+                                    "A person responsible for managing or overseeing the financial services activities of the FSP.",
+                                    "An external auditor of the FSP.",
+                                    "A compliance officer working independently of the FSP."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 2,
+                                question: "What is a primary responsibility of a key individual?",
+                                options: [
+                                    "Conducting marketing campaigns.",
+                                    "Handling client complaints directly.",
+                                    "Ensuring the FSP complies with the FAIS Act and maintaining operational ability.",
+                                    "Setting product pricing."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 3,
+                                question: "What qualifications must a key individual meet under the FAIS Act?",
+                                options: [
+                                    "A degree in financial management.",
+                                    "The 'fit and proper' requirements.",
+                                    "Completion of a regulatory exam only.",
+                                    "A minimum of 10 years of industry experience."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 4,
+                                question: "What happens if a key individual fails to fulfill their obligations under the FAIS Act?",
+                                options: [
+                                    "The FSP's license may be suspended or revoked.",
+                                    "The FSCA imposes a penalty on the key individual only.",
+                                    "The FSP receives a compliance warning.",
+                                    "Both the key individual and the FSP may face regulatory penalties."
+                                ],
+                                correctAnswer: 3
+                            },
+                            {
+                                id: 5,
+                                question: "What is the role of a key individual in appointing representatives?",
+                                options: [
+                                    "Ensuring that representatives meet the fit and proper requirements and providing supervision.",
+                                    "Delegating all responsibilities to compliance officers.",
+                                    "Approving only internal promotions.",
+                                    "Monitoring representatives' sales performance exclusively."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 6,
+                                question: "Which of the following is NOT a responsibility of a key individual?",
+                                options: [
+                                    "Monitoring the FSP's compliance with regulations.",
+                                    "Supervising representatives' activities.",
+                                    "Directly handling client investments.",
+                                    "Ensuring operational ability."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 7,
+                                question: "What must a key individual do if they identify a compliance breach?",
+                                options: [
+                                    "Wait for the FSCA's next audit to report the breach.",
+                                    "Correct the issue internally without further action.",
+                                    "Notify the FSCA and take immediate corrective action.",
+                                    "Suspend the FSP's operations indefinitely."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 8,
+                                question: "What is the relationship between a key individual and the compliance officer?",
+                                options: [
+                                    "The key individual oversees and ensures the compliance officer effectively monitors regulatory adherence.",
+                                    "The compliance officer supervises the key individual.",
+                                    "They operate independently without direct interaction.",
+                                    "The compliance officer is only accountable to representatives."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 9,
+                                question: "How does the FAIS Act hold key individuals accountable?",
+                                options: [
+                                    "Through regular performance reviews.",
+                                    "By requiring them to meet annual sales targets.",
+                                    "By penalizing only the FSP for non-compliance.",
+                                    "By ensuring they are personally responsible for overseeing compliance and operational ability."
+                                ],
+                                correctAnswer: 3
+                            },
+                            {
+                                id: 10,
+                                question: "What is the role of key individuals in risk management?",
+                                options: [
+                                    "Mitigating risks related to operational failure and compliance breaches.",
+                                    "Outsourcing all risk assessments.",
+                                    "Developing and implementing processes to manage risks effectively.",
+                                    "Limiting risk discussions to financial audits."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 11,
+                                question: "What training requirements must key individuals meet?",
+                                options: [
+                                    "Initial regulatory exam only.",
+                                    "Continuous professional development (CPD) to maintain competence.",
+                                    "Monthly compliance workshops.",
+                                    "No formal training is required."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 12,
+                                question: "What must key individuals document as part of their duties?",
+                                options: [
+                                    "Operational policies, compliance reports, and training records.",
+                                    "Client satisfaction surveys.",
+                                    "Marketing campaign outcomes.",
+                                    "Financial product performance."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 13,
+                                question: "What is the consequence if a key individual resigns or is removed from an FSP?",
+                                options: [
+                                    "The FSCA automatically revokes the FSP's license.",
+                                    "The FSP is required to cease all operations immediately.",
+                                    "The FSP must notify the FSCA and appoint a replacement who meets fit and proper requirements.",
+                                    "The FSP may continue operating without a key individual indefinitely."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 14,
+                                question: "How does a key individual contribute to maintaining operational ability?",
+                                options: [
+                                    "By overseeing resource management, infrastructure, and compliance processes.",
+                                    "By delegating tasks to representatives.",
+                                    "By focusing solely on sales targets.",
+                                    "By reducing client interactions."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 15,
+                                question: "What is the role of key individuals in managing representatives under supervision?",
+                                options: [
+                                    "Monitoring representatives' marketing campaigns.",
+                                    "Allowing representatives to operate independently after three months.",
+                                    "Ensuring representatives under supervision receive adequate training and oversight.",
+                                    "Limiting their involvement to administrative tasks."
+                                ],
+                                correctAnswer: 2
+                            }
+                        ]
+                    },
+                    {
+                        title: "Adhere to the specific Codes of Conduct",
+                        questions: [
+                            {
+                                id: 1,
+                                question: "What is the main purpose of the General Code of Conduct under the FAIS Act?",
+                                options: [
+                                    "To increase the profitability of FSPs.",
+                                    "To ensure ethical and professional behaviour and fair treatment of clients.",
+                                    "To regulate marketing strategies.",
+                                    "To simplify administrative processes."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 2,
+                                question: "When must a representative disclose fees and charges to a client?",
+                                options: [
+                                    "After concluding a financial transaction.",
+                                    "Before rendering financial services or concluding a transaction.",
+                                    "Only upon the client's request.",
+                                    "During the annual compliance review."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 3,
+                                question: "What must an FSP disclose about its products under the General Code of Conduct?",
+                                options: [
+                                    "Only the benefits of the product.",
+                                    "The profitability of the product.",
+                                    "All material terms, conditions, and risks associated with the product.",
+                                    "A comparison with competitors' products."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 4,
+                                question: "What is required when advertising financial services under the General Code of Conduct?",
+                                options: [
+                                    "Ads must prioritize the product's profitability.",
+                                    "Marketing material must not be misleading or false.",
+                                    "Advertising is not regulated under the FAIS Act.",
+                                    "Ads must target only high-net-worth individuals."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 5,
+                                question: "What is the requirement for record-keeping as per the General Code of Conduct?",
+                                options: [
+                                    "Records must only be kept for clients who request them.",
+                                    "Records must be discarded after six months.",
+                                    "Detailed records of advice must be kept for at least five years.",
+                                    "Record-keeping is optional for small FSPs."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 6,
+                                question: "What does the General Code of Conduct require regarding conflicts of interest?",
+                                options: [
+                                    "They must be ignored if they do not affect the client.",
+                                    "They should be prioritized if they benefit the FSP.",
+                                    "They must be avoided or disclosed to clients.",
+                                    "They are irrelevant in financial services."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 7,
+                                question: "What must an FSP include in its internal complaints resolution process?",
+                                options: [
+                                    "A list of past complaints and outcomes.",
+                                    "A clear and accessible process for addressing and resolving client complaints.",
+                                    "An annual review of client feedback.",
+                                    "An external consultant to mediate complaints."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 8,
+                                question: "What is required when rendering financial advice to a client?",
+                                options: [
+                                    "Recommending the most profitable product for the FSP.",
+                                    "Ensuring the advice complies with the client's marketing preferences.",
+                                    "Conducting a proper needs analysis and recommending suitable products.",
+                                    "Limiting advice to products from affiliated companies."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 9,
+                                question: "What should an FSP ensure regarding confidentiality?",
+                                options: [
+                                    "Client information must be kept confidential and used only for the agreed purpose.",
+                                    "Client information can be shared with competitors.",
+                                    "Confidentiality only applies to high-net-worth clients.",
+                                    "Confidentiality is optional for representatives under supervision."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 10,
+                                question: "What must a representative disclose when recommending a financial product?",
+                                options: [
+                                    "Why the product is suitable for the client's needs.",
+                                    "The commission earned by the representative.",
+                                    "Competitor pricing for similar products.",
+                                    "The marketing process used for the product."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 11,
+                                question: "What does the General Code of Conduct say about ongoing support for clients?",
+                                options: [
+                                    "Support is optional once the transaction is complete.",
+                                    "FSPs must provide ongoing support as agreed with the client.",
+                                    "Clients are responsible for seeking their own support.",
+                                    "Support is only required for premium financial products."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 12,
+                                question: "Which of the following is prohibited under the General Code of Conduct?",
+                                options: [
+                                    "Disclosing risks associated with financial products.",
+                                    "Making false or misleading statements in marketing material.",
+                                    "Offering clients detailed information about fees.",
+                                    "Conducting regular reviews of client needs."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 13,
+                                question: "What must an FSP do to ensure clients are treated fairly?",
+                                options: [
+                                    "Provide refunds for all complaints.",
+                                    "Focus on high-value transactions only.",
+                                    "Render services with due care, skill, and diligence.",
+                                    "Limit the scope of advice provided."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 14,
+                                question: "What is the FSP's responsibility regarding disclosure documents?",
+                                options: [
+                                    "They are optional for small transactions.",
+                                    "They must be provided in a clear, accurate, and understandable format.",
+                                    "They are required only for new clients.",
+                                    "They should be retained for internal use only."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 15,
+                                question: "What is the consequence of failing to comply with the General Code of Conduct?",
+                                options: [
+                                    "The FSP receives a warning but can continue operating.",
+                                    "The client must seek resolution through the Ombud only.",
+                                    "The FSCA may take regulatory action, including fines or suspension of the FSP's license.",
+                                    "The FSP is required to adjust its marketing material."
+                                ],
+                                correctAnswer: 2
+                            }
+                        ]
+                    },
+                    {
+                        title: "Comply with regulated record-keeping requirements",
+                        questions: [
+                            {
+                                id: 1,
+                                question: "What is the primary purpose of record-keeping under the FAIS Act?",
+                                options: [
+                                    "To reduce administrative costs for FSPs.",
+                                    "To provide evidence of compliance with regulatory requirements and protect clients.",
+                                    "To improve marketing strategies.",
+                                    "To simplify financial reporting."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 2,
+                                question: "For how long must an FSP retain records of advice provided to clients?",
+                                options: [
+                                    "Three years.",
+                                    "Five years.",
+                                    "Ten years.",
+                                    "Indefinitely."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 3,
+                                question: "What type of information must be included in the records of advice?",
+                                options: [
+                                    "The rationale for the advice and how it meets the client's needs.",
+                                    "Only the financial product purchased.",
+                                    "The client's feedback on the product.",
+                                    "A summary of all products rejected by the client."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 4,
+                                question: "What must an FSP do with client records to ensure compliance?",
+                                options: [
+                                    "Store them securely to protect confidentiality and ensure they are retrievable when needed.",
+                                    "Share them with all internal departments for efficiency.",
+                                    "Keep them only in physical formats.",
+                                    "Discard them after two years if unused."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 5,
+                                question: "What happens if an FSP fails to maintain proper records?",
+                                options: [
+                                    "The FSCA issues a warning without penalty.",
+                                    "The FSP's representatives are held accountable.",
+                                    "The FSCA may impose fines or suspend the FSP's license.",
+                                    "The FSP is required to restart its operations."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 6,
+                                question: "How does proper record-keeping support dispute resolution?",
+                                options: [
+                                    "By limiting the number of disputes raised by clients.",
+                                    "By providing documented evidence of the advice and actions taken.",
+                                    "By preventing client access to sensitive data.",
+                                    "By ensuring that disputes are handled by external agencies."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 7,
+                                question: "What is required of electronic records under the FAIS Act?",
+                                options: [
+                                    "They must be backed up on paper.",
+                                    "They should only be accessible by compliance officers.",
+                                    "They must be securely stored and retrievable when needed.",
+                                    "They must be updated monthly."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 8,
+                                question: "What is the role of the compliance officer in record-keeping?",
+                                options: [
+                                    "Ensuring that records meet regulatory standards and are updated regularly.",
+                                    "Monitoring records only during annual audits.",
+                                    "Delegating record-keeping to external consultants.",
+                                    "Overseeing only client feedback reports."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 9,
+                                question: "What documentation must an FSP maintain regarding advice?",
+                                options: [
+                                    "A copy of the client's marketing preferences.",
+                                    "Records of the advice given, the financial product recommended, and the reasons for the recommendation.",
+                                    "Competitor pricing comparisons.",
+                                    "A record of client complaints only."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 10,
+                                question: "What is required if a record is lost or destroyed?",
+                                options: [
+                                    "Notify the FSCA and provide a valid explanation.",
+                                    "Reconstruct the record using available data and report the issue if necessary.",
+                                    "Wait until the next compliance review to address the issue.",
+                                    "Ignore the loss if the client is unaffected."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 11,
+                                question: "What type of client information is most critical to retain for compliance purposes?",
+                                options: [
+                                    "Marketing preferences and demographic data.",
+                                    "Records of advice, agreements, and financial transactions.",
+                                    "Historical client complaints.",
+                                    "Client satisfaction survey results."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 12,
+                                question: "How often should an FSP review its record-keeping processes?",
+                                options: [
+                                    "Annually or as required by regulatory changes.",
+                                    "Every five years during compliance reviews.",
+                                    "Monthly as part of marketing strategies.",
+                                    "Only when instructed by the FSCA."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 13,
+                                question: "What is required of FSPs regarding confidentiality and client records?",
+                                options: [
+                                    "They can share records with all internal departments for operational efficiency.",
+                                    "They must ensure confidentiality and protect client records from unauthorized access.",
+                                    "They must make records publicly accessible upon request.",
+                                    "Confidentiality applies only to high-value clients."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 14,
+                                question: "How long must an FSP keep records of complaints?",
+                                options: [
+                                    "Two years.",
+                                    "Three years.",
+                                    "Five years.",
+                                    "Indefinitely."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 15,
+                                question: "What is a key reason for retaining records of advice for the minimum required period?",
+                                options: [
+                                    "To ensure regulatory compliance and protect both the client and the FSP in case of disputes.",
+                                    "To improve the FSP's marketing strategies.",
+                                    "To satisfy the requirements of product suppliers.",
+                                    "To simplify the representative's workload."
+                                ],
+                                correctAnswer: 0
+                            }
+                        ]
+                    },
+                    {
+                        title: "Comply with the requirements of the FIC Act and Money Laundering and Terrorist Financing control regulations, as it applies to the FSP",
+                        questions: [
+                            {
+                                id: 1,
+                                question: "What is the primary purpose of the FIC Act?",
+                                options: [
+                                    "To regulate financial markets globally.",
+                                    "To increase the profitability of financial service providers.",
+                                    "To combat money laundering and terrorist financing.",
+                                    "To oversee tax compliance for financial institutions."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 2,
+                                question: "Who is responsible for enforcing the FIC Act?",
+                                options: [
+                                    "The Financial Sector Conduct Authority (FSCA).",
+                                    "The South African Revenue Service (SARS).",
+                                    "The Financial Intelligence Centre (FIC).",
+                                    "The South African Reserve Bank."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 3,
+                                question: "What is a suspicious transaction under the FIC Act?",
+                                options: [
+                                    "Any transaction over R100,000.",
+                                    "A transaction that appears unusual or lacks an apparent legitimate purpose.",
+                                    "A routine payment for goods and services.",
+                                    "A high-value transaction with complete documentation."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 4,
+                                question: "What is required before establishing a business relationship with a client?",
+                                options: [
+                                    "Approval from the FSCA.",
+                                    "Conducting customer due diligence (CDD).",
+                                    "Obtaining the client's marketing preferences.",
+                                    "Securing a financial guarantee from the client."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 5,
+                                question: "What is the threshold amount for reporting cash transactions to the FIC?",
+                                options: [
+                                    "R25,000.",
+                                    "R50,000.",
+                                    "R100,000.",
+                                    "R500,000."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 6,
+                                question: "How soon must a suspicious transaction be reported to the FIC?",
+                                options: [
+                                    "Immediately or within 15 business days.",
+                                    "Within 30 days.",
+                                    "Within a year.",
+                                    "Only during compliance audits."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 7,
+                                question: "What is the purpose of a risk-based approach in anti-money laundering (AML)?",
+                                options: [
+                                    "To limit compliance efforts to low-risk clients only.",
+                                    "To ensure that all clients are treated the same.",
+                                    "To identify, assess, and mitigate risks based on the client's risk profile.",
+                                    "To prioritize compliance for high-net-worth individuals."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 8,
+                                question: "What information is collected during customer due diligence (CDD)?",
+                                options: [
+                                    "The client's annual income.",
+                                    "Identification, source of funds, and the nature of the business relationship.",
+                                    "The client's marketing preferences.",
+                                    "A summary of previous financial transactions."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 9,
+                                question: "What is the role of the money laundering reporting officer (MLRO)?",
+                                options: [
+                                    "To handle client complaints related to financial advice.",
+                                    "To approve all financial transactions within the FSP.",
+                                    "To oversee AML compliance and report suspicious activities to the FIC.",
+                                    "To manage the FSP's marketing strategies."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 10,
+                                question: "What must an FSP do if a client refuses to provide required documentation for CDD?",
+                                options: [
+                                    "Continue the business relationship.",
+                                    "Notify the FSCA for approval to proceed.",
+                                    "Refuse to establish the relationship or terminate it if already established.",
+                                    "Submit the partial information to the FIC."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 11,
+                                question: "What is enhanced due diligence (EDD)?",
+                                options: [
+                                    "Additional scrutiny and measures for high-risk clients or transactions.",
+                                    "Standard due diligence for all clients.",
+                                    "A process that replaces customer due diligence.",
+                                    "Simplified measures for small transactions."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 12,
+                                question: "What is the FSP's responsibility regarding record-keeping under the FIC Act?",
+                                options: [
+                                    "Retaining records of all transactions and CDD processes for at least five years.",
+                                    "Keeping records only for suspicious transactions.",
+                                    "Retaining records indefinitely.",
+                                    "Storing records for one year after termination of the business relationship."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 13,
+                                question: "How does an FSP ensure compliance with sanctions lists?",
+                                options: [
+                                    "By screening clients against the relevant sanctions lists before and during the business relationship.",
+                                    "By notifying the FIC of all client transactions.",
+                                    "By focusing on domestic clients only.",
+                                    "By delegating the process to external consultants."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 14,
+                                question: "What penalty can an FSP face for non-compliance with the FIC Act?",
+                                options: [
+                                    "Fines, license suspension, or imprisonment of responsible individuals.",
+                                    "Temporary exclusion from the FSCA register.",
+                                    "Loss of client relationships.",
+                                    "A public warning without further consequences."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 15,
+                                question: "What is the FSP's role in preventing terrorist financing?",
+                                options: [
+                                    "Avoiding international transactions entirely.",
+                                    "Reporting all high-value transactions to the FSCA.",
+                                    "Conducting due diligence and reporting any suspicious activity to the FIC.",
+                                    "Focusing on low-risk clients exclusively."
+                                ],
+                                correctAnswer: 2
+                            }
+                        ]
+                    },
+                    {
+                        title: "Dealing with complaints that have been submitted to the Ombud for FSPs",
+                        questions: [
+                            {
+                                id: 1,
+                                question: "What is the role of the Ombud for Financial Services Providers?",
+                                options: [
+                                    "To provide financial advice to clients.",
+                                    "To resolve complaints from clients against FSPs fairly and impartially.",
+                                    "To audit the financial records of FSPs.",
+                                    "To regulate product pricing in the financial services industry."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 2,
+                                question: "What is the first step an FSP must take when receiving a client complaint?",
+                                options: [
+                                    "Ignore the complaint unless escalated to the Ombud.",
+                                    "Attempt to resolve the complaint through its internal complaints resolution process.",
+                                    "Forward the complaint immediately to the FSCA.",
+                                    "Refer the client to another FSP."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 3,
+                                question: "What type of complaints falls under the Ombud's jurisdiction?",
+                                options: [
+                                    "Disputes between FSPs and product suppliers.",
+                                    "Complaints regarding unfair treatment or contraventions of the FAIS Act.",
+                                    "Employment grievances within the FSP.",
+                                    "Issues related to global financial markets."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 4,
+                                question: "When must a complaint be escalated to the Ombud?",
+                                options: [
+                                    "Within 30 days of receipt by the FSP.",
+                                    "After all internal resolution attempts have been exhausted.",
+                                    "Immediately upon receipt of the complaint.",
+                                    "Only if the client requests an Ombud review."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 5,
+                                question: "What must the FSP provide to the Ombud during an investigation?",
+                                options: [
+                                    "A detailed response and supporting documentation related to the complaint.",
+                                    "A summary of the client's financial history.",
+                                    "Copies of all internal communications.",
+                                    "Client testimonials unrelated to the complaint."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 6,
+                                question: "What is a 'determination' issued by the Ombud?",
+                                options: [
+                                    "A financial penalty for the FSP.",
+                                    "A final decision on the complaint, which may be enforced as a court order.",
+                                    "A report summarizing the Ombud's activities.",
+                                    "An advisory note for FSPs."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 7,
+                                question: "What is required of an FSP regarding its complaints resolution process?",
+                                options: [
+                                    "It must be documented and accessible to clients.",
+                                    "It must adhere to fair and transparent practices as outlined in the FAIS Act.",
+                                    "It must prioritize only high-value complaints.",
+                                    "It is optional for small FSPs."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 8,
+                                question: "How long must FSPs retain records of complaints?",
+                                options: [
+                                    "One year.",
+                                    "Three years.",
+                                    "Five years.",
+                                    "Indefinitely."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 9,
+                                question: "What must an FSP do if a complaint involves a representative?",
+                                options: [
+                                    "Investigate the representative's conduct and take appropriate corrective action if needed.",
+                                    "Assign the complaint to another representative.",
+                                    "Ignore the complaint if the representative has left the FSP.",
+                                    "Forward the complaint directly to the FSCA."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 10,
+                                question: "What is the Ombud's goal in resolving complaints?",
+                                options: [
+                                    "To penalize the FSP for errors.",
+                                    "To achieve a fair outcome for both the client and the FSP.",
+                                    "To increase compliance costs for the FSP.",
+                                    "To escalate disputes to the FSCA."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 11,
+                                question: "Which of the following is NOT required in the FSP's complaints resolution process?",
+                                options: [
+                                    "Keeping records of all complaints received.",
+                                    "Resolving complaints within one business day regardless of complexity.",
+                                    "Informing clients of their right to escalate unresolved complaints to the Ombud.",
+                                    "Providing regular feedback to clients about the status of their complaints."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 12,
+                                question: "What is required if the Ombud rules in favour of the client?",
+                                options: [
+                                    "The FSP may ignore the determination if it believes it is unfair.",
+                                    "The Ombud imposes an administrative fine on the FSP.",
+                                    "The FSP must comply with the Ombud's determination within the specified timeframe.",
+                                    "The FSP may appeal the decision without taking further action."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 13,
+                                question: "What should an FSP include in its internal complaints procedure?",
+                                options: [
+                                    "Clear steps for clients to follow and a timeline for addressing complaints.",
+                                    "A focus on marketing additional services to dissatisfied clients.",
+                                    "A review of only the FSP's financial performance.",
+                                    "A penalty for clients submitting invalid complaints."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 14,
+                                question: "What happens if an FSP ignores a referral from the Ombud?",
+                                options: [
+                                    "The complaint is dismissed.",
+                                    "The Ombud can issue a binding determination against the FSP.",
+                                    "The Ombud forwards the case to a court.",
+                                    "The FSP is required to conduct an internal review."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 15,
+                                question: "What is the FSP's role in minimizing complaints?",
+                                options: [
+                                    "Complying with the FAIS Act and treating clients fairly.",
+                                    "Offering refunds for all services rendered.",
+                                    "Avoiding low-income clients.",
+                                    "Delegating complaint handling to third-party consultants."
+                                ],
+                                correctAnswer: 0
+                            }
+                        ]
+                    },
+                    {
+                        title: "Operate as a Representative in terms of the FAIS Act",
+                        questions: [
+                            {
+                                id: 1,
+                                question: "Who is classified as a representative under the FAIS Act?",
+                                options: [
+                                    "A compliance officer of an FSP.",
+                                    "An individual who renders financial services to clients on behalf of a licensed FSP.",
+                                    "A shareholder in a financial institution.",
+                                    "A key individual managing the FSP's operations."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 2,
+                                question: "What is a representative's primary responsibility?",
+                                options: [
+                                    "Marketing financial products.",
+                                    "Rendering financial advice and/or intermediary services to clients.",
+                                    "Managing the FSP's compliance policies.",
+                                    "Supervising other representatives."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 3,
+                                question: "What qualifications must a representative meet to render financial services?",
+                                options: [
+                                    "They must comply with the 'fit and proper' requirements under the FAIS Act.",
+                                    "They must have a degree in financial management.",
+                                    "They must pass only an internal assessment.",
+                                    "They require at least 10 years of experience."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 4,
+                                question: "When must a representative disclose information about a financial product to a client?",
+                                options: [
+                                    "Before rendering financial services or concluding any transaction.",
+                                    "After the client requests specific details.",
+                                    "During the annual review of the client's financial portfolio.",
+                                    "Only if the product includes high risks."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 5,
+                                question: "What is required of representatives when dealing with conflicts of interest?",
+                                options: [
+                                    "Resolve conflicts internally without informing clients.",
+                                    "Avoid or disclose conflicts of interest to clients and act in their best interest.",
+                                    "Report conflicts to the Ombud for Financial Services Providers.",
+                                    "Ensure conflicts benefit the FSP."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 6,
+                                question: "How does the FAIS Act ensure accountability for representatives?",
+                                options: [
+                                    "By holding both the representative and the FSP responsible for regulatory compliance.",
+                                    "By requiring the FSCA to directly monitor representatives.",
+                                    "By exempting representatives from compliance obligations.",
+                                    "By delegating all accountability to the FSP."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 7,
+                                question: "What must a representative provide as part of their record-keeping obligations?",
+                                options: [
+                                    "Client marketing preferences.",
+                                    "Detailed records of advice and rationale for recommendations provided to clients.",
+                                    "A summary of annual sales performance.",
+                                    "A list of competitor products."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 8,
+                                question: "What is the representative's role in client protection?",
+                                options: [
+                                    "To limit interactions with high-risk clients.",
+                                    "To ensure clients are informed and treated fairly during financial transactions.",
+                                    "To prioritize the profitability of financial products.",
+                                    "To refer all decisions to the FSP's key individual."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 9,
+                                question: "What is required of a representative under supervision?",
+                                options: [
+                                    "They must limit services to low-risk clients only.",
+                                    "They must operate under the guidance of an experienced individual while gaining qualifications.",
+                                    "They can provide financial services independently.",
+                                    "They are exempt from compliance requirements."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 10,
+                                question: "What must a representative do if a client rejects their financial advice?",
+                                options: [
+                                    "Document the rejection and proceed only with the client's informed consent.",
+                                    "Terminate the client relationship immediately.",
+                                    "Refer the client to the FSCA for further review.",
+                                    "Withhold all future services from the client."
+                                ],
+                                correctAnswer: 0
+                            },
+                            {
+                                id: 11,
+                                question: "What is the role of continuous professional development (CPD) for representatives?",
+                                options: [
+                                    "It is optional for experienced representatives.",
+                                    "It is limited to newly hired representatives.",
+                                    "It ensures representatives maintain competence and stay updated on regulatory changes.",
+                                    "It applies only to representatives in key positions."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 12,
+                                question: "What must a representative do before recommending a financial product?",
+                                options: [
+                                    "Guarantee the product's performance.",
+                                    "Compare the product with similar ones on the market.",
+                                    "Conduct a proper needs analysis to ensure the product is suitable for the client.",
+                                    "Focus on products with the highest commission rates."
+                                ],
+                                correctAnswer: 2
+                            },
+                            {
+                                id: 13,
+                                question: "What happens if a representative violates the FAIS Act?",
+                                options: [
+                                    "They are exempt from any disciplinary action.",
+                                    "The FSP may initiate a debarment process against the representative.",
+                                    "They automatically receive a fine from the FSCA.",
+                                    "The Ombud resolves the matter directly."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 14,
+                                question: "Who supervises representatives operating under an FSP?",
+                                options: [
+                                    "The FSCA directly.",
+                                    "The FSP's key individual or compliance officer.",
+                                    "The Ombud for Financial Services Providers.",
+                                    "Other experienced representatives."
+                                ],
+                                correctAnswer: 1
+                            },
+                            {
+                                id: 15,
+                                question: "What must a representative disclose to clients regarding fees?",
+                                options: [
+                                    "The total costs, including fees, charges, and any commissions earned.",
+                                    "Only fees related to high-value transactions.",
+                                    "Competitor pricing for similar products.",
+                                    "A breakdown of the FSP's operational expenses."
+                                ],
+                                correctAnswer: 0
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // Application state
+        let currentExam = null;
+        let currentTask = 0;
+        let currentQuestion = 0;
+        let userAnswers = {};
+        let startTime = null;
+        let timerInterval = null;
+        let elapsedTime = 0;
+        let showResults = false;
+
+        // DOM elements
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const re1Btn = document.getElementById('re1-btn');
+        const re5Btn = document.getElementById('re5-btn');
+        const continueBtn = document.getElementById('continue-btn');
+        const taskList = document.getElementById('task-list');
+        const currentTaskTitle = document.getElementById('current-task-title');
+        const questionCounter = document.getElementById('question-counter');
+        const questionText = document.getElementById('question-text');
+        const optionsList = document.getElementById('options');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const finishBtn = document.getElementById('finish-btn');
+        const progressBar = document.getElementById('progress');
+        const timerElement = document.getElementById('timer');
+        const feedbackElement = document.getElementById('feedback');
+        const finalScore = document.getElementById('final-score');
+        const reviewBtn = document.getElementById('review-btn');
+        const newSessionBtn = document.getElementById('new-session-btn');
+        const viewRe5MaterialBtn = document.getElementById('view-re5-material');
+        const viewFaisInfoBtn = document.getElementById('view-fais-info');
+        const viewFicInfoBtn = document.getElementById('view-fic-info');
+
+        // Navigation
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sectionId = link.getAttribute('data-section');
+                showSection(sectionId);
+            });
+        });
+
+        function showSection(sectionId) {
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            if (sectionId === 'results') {
+                displayResults();
+            }
+        }
+
+        // Exam selection
+        re1Btn.addEventListener('click', () => {
+            currentExam = 're1';
+            initializeExam();
+            showSection('practice');
+        });
+
+        re5Btn.addEventListener('click', () => {
+            currentExam = 're5';
+            initializeExam();
+            showSection('practice');
+        });
+
+        continueBtn.addEventListener('click', () => {
+            // Load the last session from localStorage
+            const lastExam = localStorage.getItem('lastExam');
+            if (lastExam && examData[lastExam]) {
+                currentExam = lastExam;
+                initializeExam();
+                showSection('practice');
+                
+                // Load previous answers
+                const savedAnswers = localStorage.getItem(`userAnswers-${currentExam}`);
+                if (savedAnswers) {
+                    userAnswers = JSON.parse(savedAnswers);
+                }
+                
+                // Load last position
+                const lastTask = parseInt(localStorage.getItem(`lastTask-${currentExam}`)) || 0;
+                const lastQuestion = parseInt(localStorage.getItem(`lastQuestion-${currentExam}`)) || 0;
+                
+                currentTask = lastTask;
+                currentQuestion = lastQuestion;
+                loadQuestion();
+            } else {
+                alert('No previous session found. Please select an exam to start.');
+            }
+        });
+
+        function initializeExam() {
+            currentTask = 0;
+            currentQuestion = 0;
+            userAnswers = {};
+            startTime = new Date();
+            elapsedTime = 0;
+            showResults = false;
+            
+            // Start timer
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Populate task list
+            populateTaskList();
+            
+            // Load first question
+            loadQuestion();
+            
+            // Save to localStorage
+            localStorage.setItem('lastExam', currentExam);
+        }
+
+        function populateTaskList() {
+            taskList.innerHTML = '';
+            const tasks = examData[currentExam].tasks;
+            
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.textContent = `Task ${index + 1}`;
+                li.addEventListener('click', () => {
+                    currentTask = index;
+                    currentQuestion = 0;
+                    loadQuestion();
+                    updateActiveTask();
+                });
+                
+                // Add progress indicator
+                const progress = document.createElement('span');
+                progress.className = 'task-progress';
+                progress.textContent = '0%';
+                li.appendChild(progress);
+                
+                taskList.appendChild(li);
+            });
+            
+            updateActiveTask();
+            updateTaskProgress();
+        }
+
+        function updateActiveTask() {
+            const taskItems = taskList.querySelectorAll('li');
+            taskItems.forEach((item, index) => {
+                if (index === currentTask) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function updateTaskProgress() {
+            const taskItems = taskList.querySelectorAll('li');
+            const tasks = examData[currentExam].tasks;
+            
+            taskItems.forEach((item, index) => {
+                const task = tasks[index];
+                const progressElement = item.querySelector('.task-progress');
+                
+                if (task && task.questions) {
+                    const totalQuestions = task.questions.length;
+                    let answered = 0;
+                    
+                    for (let i = 0; i < totalQuestions; i++) {
+                        const answerKey = `${index}-${i}`;
+                        if (userAnswers[answerKey] !== undefined) {
+                            answered++;
+                        }
+                    }
+                    
+                    const progress = totalQuestions > 0 ? Math.round((answered / totalQuestions) * 100) : 0;
+                    progressElement.textContent = `${progress}%`;
+                }
+            });
+        }
+
+        function loadQuestion() {
+            if (!currentExam) return;
+            
+            const tasks = examData[currentExam].tasks;
+            const task = tasks[currentTask];
+            const question = task.questions[currentQuestion];
+            
+            // Update task title
+            currentTaskTitle.textContent = `Task ${currentTask + 1}: ${task.title}`;
+            
+            // Update question counter
+            questionCounter.textContent = `Question ${currentQuestion + 1} of ${task.questions.length}`;
+            
+            // Update question text
+            questionText.textContent = question.question;
+            
+            // Update options
+            optionsList.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const li = document.createElement('li');
+                li.className = 'option';
+                li.textContent = option;
+                li.addEventListener('click', () => selectOption(index));
+                
+                // Check if this option was previously selected
+                const answerKey = `${currentTask}-${currentQuestion}`;
+                if (userAnswers[answerKey] === index) {
+                    li.classList.add('selected');
+                    
+                    // If we're showing results, highlight correct/incorrect
+                    if (showResults) {
+                        if (index === question.correctAnswer) {
+                            li.classList.add('correct');
+                        } else {
+                            li.classList.add('incorrect');
+                        }
+                    }
+                }
+                
+                // If showing results, highlight correct answer
+                if (showResults && index === question.correctAnswer) {
+                    li.classList.add('correct');
+                }
+                
+                optionsList.appendChild(li);
+            });
+            
+            // Update navigation buttons
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.disabled = currentQuestion === task.questions.length - 1;
+            
+            // Show/hide buttons
+            submitBtn.style.display = 'none';
+            finishBtn.style.display = 'none';
+            nextBtn.style.display = 'block';
+            
+            if (currentQuestion === task.questions.length - 1) {
+                if (showResults) {
+                    finishBtn.style.display = 'block';
+                } else {
+                    submitBtn.style.display = 'block';
+                }
+                nextBtn.style.display = 'none';
+            }
+            
+            // Update progress bar
+            const totalQuestions = task.questions.length;
+            const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            // Show feedback if reviewing
+            if (showResults) {
+                showFeedback();
+            } else {
+                feedbackElement.className = 'feedback';
+                feedbackElement.style.display = 'none';
+            }
+            
+            // Save current position
+            localStorage.setItem(`lastTask-${currentExam}`, currentTask);
+            localStorage.setItem(`lastQuestion-${currentExam}`, currentQuestion);
+            localStorage.setItem(`userAnswers-${currentExam}`, JSON.stringify(userAnswers));
+            
+            // Update task progress
+            updateTaskProgress();
+        }
+
+        function selectOption(optionIndex) {
+            if (showResults) return; // Don't allow selection when reviewing
+            
+            const options = optionsList.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            options[optionIndex].classList.add('selected');
+            
+            // Store user's answer
+            const answerKey = `${currentTask}-${currentQuestion}`;
+            userAnswers[answerKey] = optionIndex;
+            
+            // Save to localStorage
+            localStorage.setItem(`userAnswers-${currentExam}`, JSON.stringify(userAnswers));
+            
+            // Update task progress
+            updateTaskProgress();
+        }
+
+        function showFeedback() {
+            const tasks = examData[currentExam].tasks;
+            const task = tasks[currentTask];
+            const question = task.questions[currentQuestion];
+            const answerKey = `${currentTask}-${currentQuestion}`;
+            const userAnswer = userAnswers[answerKey];
+            
+            feedbackElement.innerHTML = '';
+            
+            if (userAnswer === question.correctAnswer) {
+                feedbackElement.className = 'feedback correct';
+                feedbackElement.innerHTML = '<strong>Correct!</strong> Your answer is right.';
+            } else {
+                feedbackElement.className = 'feedback incorrect';
+                feedbackElement.innerHTML = `<strong>Incorrect.</strong> The correct answer is: ${question.options[question.correctAnswer]}`;
+            }
+            
+            feedbackElement.style.display = 'block';
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            const tasks = examData[currentExam].tasks;
+            const task = tasks[currentTask];
+            
+            if (currentQuestion < task.questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            }
+        });
+
+        submitBtn.addEventListener('click', () => {
+            // Check if all questions in this task are answered
+            const tasks = examData[currentExam].tasks;
+            const task = tasks[currentTask];
+            let allAnswered = true;
+            
+            for (let i = 0; i < task.questions.length; i++) {
+                const answerKey = `${currentTask}-${i}`;
+                if (userAnswers[answerKey] === undefined) {
+                    allAnswered = false;
+                    break;
+                }
+            }
+            
+            if (allAnswered) {
+                showResults = true;
+                loadQuestion(); // Reload to show results
+            } else {
+                alert('Please answer all questions in this task before submitting.');
+            }
+        });
+
+        finishBtn.addEventListener('click', () => {
+            clearInterval(timerInterval);
+            showSection('results');
+        });
+
+        function updateTimer() {
+            elapsedTime++;
+            const minutes = Math.floor(elapsedTime / 60);
+            const seconds = elapsedTime % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function displayResults() {
+            if (!currentExam) return;
+            
+            let correctCount = 0;
+            let totalCount = 0;
+            
+            // Calculate score for current task
+            const tasks = examData[currentExam].tasks;
+            const task = tasks[currentTask];
+            
+            for (let qIndex = 0; qIndex < task.questions.length; qIndex++) {
+                totalCount++;
+                const answerKey = `${currentTask}-${qIndex}`;
+                const userAnswer = userAnswers[answerKey];
+                const correctAnswer = task.questions[qIndex].correctAnswer;
+                
+                if (userAnswer === correctAnswer) {
+                    correctCount++;
+                }
+            }
+            
+            const score = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+            
+            // Update results display
+            finalScore.textContent = `${score}%`;
+            document.getElementById('summary-total').textContent = totalCount;
+            document.getElementById('summary-correct').textContent = correctCount;
+            document.getElementById('summary-incorrect').textContent = totalCount - correctCount;
+            document.getElementById('summary-time').textContent = timerElement.textContent;
+            
+            // Update dashboard stats
+            updateDashboardStats();
+            
+            // Initialize chart if available
+            if (typeof Chart !== 'undefined') {
+                initializeChart(score, totalCount - correctCount, correctCount);
+            }
+        }
+
+        function initializeChart(score, incorrect, correct) {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Correct', 'Incorrect'],
+                    datasets: [{
+                        data: [correct, incorrect],
+                        backgroundColor: [
+                            'rgba(46, 204, 113, 0.8)',
+                            'rgba(231, 76, 60, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(46, 204, 113, 1)',
+                            'rgba(231, 76, 60, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateDashboardStats() {
+            if (!currentExam) return;
+            
+            let totalQuestions = 0;
+            let correctAnswers = 0;
+            let completedTasks = 0;
+            
+            const tasks = examData[currentExam].tasks;
+            
+            tasks.forEach((task, taskIndex) => {
+                let taskCompleted = true;
+                
+                for (let qIndex = 0; qIndex < task.questions.length; qIndex++) {
+                    totalQuestions++;
+                    const answerKey = `${taskIndex}-${qIndex}`;
+                    const userAnswer = userAnswers[answerKey];
+                    const correctAnswer = task.questions[qIndex].correctAnswer;
+                    
+                    if (userAnswer !== undefined) {
+                        if (userAnswer === correctAnswer) {
+                            correctAnswers++;
+                        }
+                    } else {
+                        taskCompleted = false;
+                    }
+                }
+                
+                if (taskCompleted) {
+                    completedTasks++;
+                }
+            });
+            
+            const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
+            
+            document.getElementById('total-questions').textContent = totalQuestions;
+            document.getElementById('correct-answers').textContent = correctAnswers;
+            document.getElementById('accuracy').textContent = `${accuracy}%`;
+            document.getElementById('completed-tasks').textContent = completedTasks;
+        }
+
+        reviewBtn.addEventListener('click', () => {
+            showResults = true;
+            showSection('practice');
+            loadQuestion();
+        });
+
+        newSessionBtn.addEventListener('click', () => {
+            // Reset for new session
+            userAnswers = {};
+            showResults = false;
+            showSection('dashboard');
+            updateDashboardStats();
+        });
+
+        // Resource section buttons
+        viewRe5MaterialBtn.addEventListener('click', () => {
+            alert('RE5 Study Material: This comprehensive material covers all 8 tasks for Regulatory Examination 5 according to the official Examination guideline. It includes detailed explanations of key concepts and practice questions.');
+        });
+
+        viewFaisInfoBtn.addEventListener('click', () => {
+            alert('FAIS Act Overview: The Financial Advisory and Intermediary Services Act regulates the provision of financial advice and intermediary services in South Africa. Key aspects include licensing requirements, fit and proper standards, and client protection measures.');
+        });
+
+        viewFicInfoBtn.addEventListener('click', () => {
+            alert('FIC Act Guidelines: The Financial Intelligence Centre Act aims to combat money laundering and terrorist financing. It requires customer due diligence, reporting of suspicious transactions, and record-keeping for financial service providers.');
+        });
+
+        // Initialize dashboard stats
+        updateDashboardStats();
+        
+        // Load Chart.js library if needed
+        if (!window.Chart) {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+            script.onload = function() {
+                console.log('Chart.js loaded successfully');
+            };
+            document.head.appendChild(script);
+        }
+    </script>
+</body>
+</html>
